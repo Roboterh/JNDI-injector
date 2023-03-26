@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<!--<!DOCTYPE foo [-->
+<!--        <!ELEMENT foo ANY >-->
+<!--        <!ENTITY xxe SYSTEM "data:text/plain;base64,PHNjcmlwdD5hbGVydCgiY2FsYyIpOyI+PC9zY3JpcHQ+">]>-->
+<!--<foo>&xxe;</foo>-->
+<!DOCTYPE root [
+        <!ENTITY test SYSTEM "http://127.0.0.1:8888/test">]>
+<root>&test;</root>
