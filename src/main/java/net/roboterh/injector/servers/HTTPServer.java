@@ -57,6 +57,8 @@ public class HTTPServer {
                         handleYamlRequest(httpExchange);
                     } else if (path.endsWith(".txt")) {
                         handleTxtRequest(httpExchange);
+                    } else {
+                        handleOtherRequest(httpExchange);
                     }
                 }
             });

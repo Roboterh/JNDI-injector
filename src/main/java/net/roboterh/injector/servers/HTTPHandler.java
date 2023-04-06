@@ -306,4 +306,30 @@ public class HTTPHandler {
         }
         httpExchange.close();
     }
+
+    public static void handleOtherRequest(HttpExchange httpExchange) {
+        try {
+            // obtain the fileName
+            String path = httpExchange.getRequestURI().getPath();
+            String PropertiesName = path.substring(path.lastIndexOf("/") + 1);
+
+            String filePath = cwd + File.separator + "data" + File.separator + PropertiesName;
+            // customize
+            File file = new File(filePath);
+            if (file.exists()) {
+                // file exists
+                FileReader fileReader = new FileReader(filePath, "UTF-8");
+                byte[] bytes = fileReader.readBytes();
+                httpExchange.sendResponseHeaders(200, bytes.length + 1);
+                httpExchange.getResponseBody().write(bytes);
+            } else {
+                // not exist
+                logger.info(String.format("The file %s don't exist ...", filePath));
+                httpExchange.sendResponseHeaders(404, 0);
+            }
+        } catch (Exception e) {
+            logger.info(e.getMessage());
+        }
+        httpExchange.close();
+    }
 }

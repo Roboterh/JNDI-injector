@@ -16,14 +16,35 @@ public interface ConstantUtil {
     String TomcatXStreamNote = "需要具有Tomcat and XStream依赖";
     String TomcatMVELNote = "需要具有Tomcat and MVEL依赖";
     String TomcatCommonsConfigurationNote = "需要具有Tomcat and commons-configuration/commons-configuration2";
-    String TomcatOrDruidJdbc = "需要具有tomcat-dbcp/commons-dbcp/tomcat-jdbc/Druid and JDBC Driver依赖";
+    String TomcatOrDruidJdbcNote = "需要具有tomcat-dbcp/commons-dbcp/tomcat-jdbc/Druid and JDBC Driver依赖";
+
+    String DnsLogNote = "发送dns查询请求";
+    String CommandNote = "直接执行命令";
+    String ReverseShellNote = "通过反弹shell的方式";
+    String FileNote = "获取data目录下的脚本文件进行执行";
+    String JavaFileNote = "获取一个内存马注入的模板内容，内置了Servlet等常见内存马\n这里是为了方便更好的自定义";
+    String TomcatEchoNote = "一个在Tomcat环境下的回显马\n1.通过cmd这个header头进行传参";
+    String TomcatServletNote = "一个在Tomcat环境下的Servlet内存马\n1.创建的Servlet路由是/shell\n2.通过cmd这个header头传参\n3.servletName是roboterh";
+    String TomcatListenerNote = "一个在Tomcat环境下的Listener内存马\n1.通过cmd这个header头传参";
+    String TomcatFilterNote = "一个在Tomcat环境下的Filter内存马\n1.创建的Filter路由是/*\n2.通过cmd这个header头传参\n3.filterName是roboterh";
+    String TomcatExecutorNote = "一个在Tomcat环境下的Executor层上的内存马\n1.通过cmd这个header头传参";
+    String TomcatUpgradeNote = "一个在Tomcat环境下的Upgrade层上的内存马\n1.需要在header头中添加Connection: Upgrade\n2.通过cmd这个header头传参";
+    String TomcatValveNote = "一个在Tomcat环境下的Valve内存马\n1.通过cmd这个header头进行传参";
+    String TomcatWebsocketNote = "一个在Tomcat环境下的websocket这个全双工协议上的内存马\n1.创建的路由是/shell\n2.直接进行websocket通信进行传参";
+    String SpringControllerNote = "一个在Spring环境下的Controller型内存马\n1.创建的Controller路由是/shell\n2.通过cmd这个header头传参";
+    String SpringInterceptorNote = "一个在Spring环境下的Interceptor型内存马\n1.通过cmd这个header头传参";
+    String SpringEchoNote = "一个在Spring环境下的回显马\n1.通过cmd这个header头传参";
 
     // payload with different ways of JNDI
     String[] BasicPayload = {"Command", "DnsLog"};
     String[] DeserializationPayload = {"URLDNS", "JDK8u20"};
     String[] TomcatPayload = {"XXE"};
-    String[] TomcatELPayload = {"Command", "DnsLog", "ReverseShell", "File"};
-    String[] TomcatGroovyPayload = {"Command", "DnsLog", "File"};
+    String[] TomcatELPayload = {"Command", "DnsLog", "ReverseShell", "File", "JavaFile", "TomcatEcho", "TomcatExecutor", "TomcatFilter"
+            , "TomcatListener", "TomcatServlet", "TomcatUpgrade", "TomcatValve", "TomcatWebsocket", "SpringController", "SpringEcho"
+            , "SpringInterceptor"};
+    String[] TomcatGroovyPayload = {"Command", "DnsLog", "File", "JavaFile", "TomcatEcho", "TomcatExecutor", "TomcatFilter"
+            , "TomcatListener", "TomcatServlet", "TomcatUpgrade", "TomcatValve", "TomcatWebsocket", "SpringController", "SpringEcho"
+            , "SpringInterceptor"};
     String[] TomcatSnakeYamlPayload = {"Command", "DnsLog", "File"};
     String[] TomcatXStreamPayload = {"Command", "File"};
     String[] TomcatMVELPayload = {"Command", "File"};

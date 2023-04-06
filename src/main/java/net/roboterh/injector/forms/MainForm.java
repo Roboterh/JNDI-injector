@@ -275,7 +275,68 @@ public class MainForm {
                         label.setToolTipText(TomcatCommonsConfigurationNote);
                         break;
                     case "TomcatOrDruidJdbc":
-                        label.setToolTipText(TomcatOrDruidJdbc);
+                        label.setToolTipText(TomcatOrDruidJdbcNote);
+                        break;
+                }
+                return label;
+            }
+        });
+
+        // Payload List suspend
+        PayloadList.setToolTipText("");
+        PayloadList.setCellRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                label.setToolTipText((String) value); // 设置当前元素的鼠标悬浮提示为元素的值
+                switch ((String) value) {
+                    case "DnsLog":
+                        label.setToolTipText(DnsLogNote);
+                        break;
+                    case "Command":
+                        label.setToolTipText(CommandNote);
+                        break;
+                    case "ReverseShell":
+                        label.setToolTipText(ReverseShellNote);
+                        break;
+                    case "File":
+                        label.setToolTipText(FileNote);
+                        break;
+                    case "JavaFile":
+                        label.setToolTipText(JavaFileNote);
+                        break;
+                    case "TomcatEcho":
+                        label.setToolTipText(TomcatEchoNote);
+                        break;
+                    case "TomcatServlet":
+                        label.setToolTipText(TomcatServletNote);
+                        break;
+                    case "TomcatListener":
+                        label.setToolTipText(TomcatListenerNote);
+                        break;
+                    case "TomcatFilter":
+                        label.setToolTipText(TomcatFilterNote);
+                        break;
+                    case "TomcatExecutor":
+                        label.setToolTipText(TomcatExecutorNote);
+                        break;
+                    case "TomcatUpgrade":
+                        label.setToolTipText(TomcatUpgradeNote);
+                        break;
+                    case "TomcatValve":
+                        label.setToolTipText(TomcatValveNote);
+                        break;
+                    case "TomcatWebsocket":
+                        label.setToolTipText(TomcatWebsocketNote);
+                        break;
+                    case "SpringEcho":
+                        label.setToolTipText(SpringEchoNote);
+                        break;
+                    case "SpringController":
+                        label.setToolTipText(SpringControllerNote);
+                        break;
+                    case "SpringInterceptor":
+                        label.setToolTipText(SpringInterceptorNote);
                         break;
                 }
                 return label;
@@ -387,11 +448,25 @@ public class MainForm {
                                     ReverseIpTextField, ReversePortTextField, LdapSearchTextPane);
                             ldapSearchListener.register();
                             break;
+                        case "JavaFile":
+                            setPanelVisibleToTrue(FilePanel);
+
+                            // init the FilenameTextField
+                            FilenameTextField.setText("TestShell.java");
+
+                            if (ldapSearchListener != null) {
+                                ldapSearchListener.unregister();
+                            }
+                            ldapSearchListener = new LdapSearchListener(WaysList, PayloadList,
+                                    FilenameTextField, LdapSearchTextPane);
+                            ldapSearchListener.register();
+                            break;
                         case "File":
                             setPanelVisibleToTrue(FilePanel);
 
                             // init the FilenameTextField
                             String way = (String) WaysList.getSelectedValue();
+//                            String payload = (String) PayloadList.getSelectedValue();
                             if (way.equals("TomcatEL")) {
                                 FilenameTextField.setText("TomcatEL.js");
                             } else if (way.equals("TomcatGroovy")) {
@@ -508,6 +583,25 @@ public class MainForm {
                             }
                             ldapSearchListener = new LdapSearchListener(WaysList, PayloadList, ScriptFileTextField, buttonGroup3,
                                     LdapSearchTextPane);
+                            ldapSearchListener.register();
+                            break;
+                        case "TomcatEcho":
+                        case "TomcatExecutor":
+                        case "TomcatFilter":
+                        case "TomcatListener":
+                        case "TomcatServlet":
+                        case "TomcatUpgrade":
+                        case "TomcatValve":
+                        case "TomcatWebsocket":
+                        case "SpringController":
+                        case "SpringEcho":
+                        case "SpringInterceptor":
+                            setPanelVisibleToTrue(null);
+
+                            if (ldapSearchListener != null) {
+                                ldapSearchListener.unregister();
+                            }
+                            ldapSearchListener = new LdapSearchListener(WaysList, PayloadList, LdapSearchTextPane);
                             ldapSearchListener.register();
                             break;
                         default:
