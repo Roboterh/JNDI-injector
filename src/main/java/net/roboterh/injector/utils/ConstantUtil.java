@@ -2,6 +2,9 @@ package net.roboterh.injector.utils;
 
 public interface ConstantUtil {
 
+    /**
+     *            =================           notes           =================
+     */
     // notes clicked
     String WaysNote = "JNDI注入的方式暂时大致可以分为下面三类\n\t1.基础版的JNDI注入\n\t2.使用反序列化的方式绕过限制\n\t3.使用已知组件的绕过方式";
     String PayloadNote = "根据前面选择的不同的注入方式来进行不同的Payload选择";
@@ -35,6 +38,9 @@ public interface ConstantUtil {
     String SpringInterceptorNote = "一个在Spring环境下的Interceptor型内存马\n1.通过cmd这个header头传参";
     String SpringEchoNote = "一个在Spring环境下的回显马\n1.通过cmd这个header头传参";
 
+    /**
+     *            =================           valid payloads for different ways            =================
+     */
     // payload with different ways of JNDI
     String[] BasicPayload = {"Command", "DnsLog"};
     String[] DeserializationPayload = {"URLDNS", "JDK8u20"};
@@ -51,6 +57,9 @@ public interface ConstantUtil {
     String[] TomcatCommonsConfigurationPayload = {"BeanFactory", "GenericNamingResourcesFactory"};
     String[] TomcatOrDruidJdbcPayload = {"H2", "Mysql"};
 
+    /**
+     *            =================           description of different ways            =================
+     */
     // description of different way
     String BasicDescription = "<html>Basic way<br>" +
             "Requirement:<br>" +

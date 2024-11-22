@@ -3,7 +3,6 @@ package net.roboterh.injector.utils;
 import com.sun.org.apache.xalan.internal.xsltc.runtime.AbstractTranslet;
 import com.sun.org.apache.xalan.internal.xsltc.trax.TemplatesImpl;
 import com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl;
-import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 import net.roboterh.injector.enums.PayloadEnum;
 import net.roboterh.injector.templates.CommandTemplate;
 import net.roboterh.injector.templates.DnsLogTemplate;

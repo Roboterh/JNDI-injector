@@ -8,6 +8,9 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.Enumeration;
 
+/**
+ * Dynamic ldap connection assembler
+ */
 public class LdapSearchListener implements DocumentListener, ListSelectionListener, RegistrableListener, ItemListener {
     public static String ldapSearch = null;
 
@@ -83,7 +86,9 @@ public class LdapSearchListener implements DocumentListener, ListSelectionListen
             label.setText(s);
             return;
         }
+        // base link
         StringBuilder builder = new StringBuilder("LDAP Search Link:   " + LdapServer.ldapBase);
+        // way and payload
         builder.append((String) waysList.getSelectedValue() + "/").append((String) payloadList.getSelectedValue() + "/");
         if (buttonGroup != null) {
             ButtonModel selectedModel = buttonGroup.getSelection();
@@ -97,6 +102,7 @@ public class LdapSearchListener implements DocumentListener, ListSelectionListen
                         break;
                     }
                 }
+                // append optional text
                 builder.append(selectedText + "/");
             } else if (selectedModel instanceof JToggleButton.ToggleButtonModel) {
                 String selectedText = ((JToggleButton) selectedModel).getText();

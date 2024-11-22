@@ -9,11 +9,14 @@ public class Main {
     private static final Logger logger = LogManager.getLogger(Main.class);
 
     public static void main(String[] args) {
-        if (args.length > 0) {
-            logger.info("This is a GUI tools for JNDI injection!!\n" +
-                    "Now, you could run 'java -jar JNDI-injector' to start it.");
+        if (args.length == 1 && "cli".equals(args[0])) {
+//            logger.info("This is a GUI tools for JNDI injection!!\n" +
+//                    "Now, you could run 'java -jar JNDI-injector' to start it.");
+            // use cli mode
+        } else {
+            // use GUI mode (default)
+            MainForm.main();
         }
-        MainForm.main();
 //        for (GadgetEnum gadgetEnum : GadgetEnum.values()) {
 //            System.out.println(gadgetEnum);
 //        }

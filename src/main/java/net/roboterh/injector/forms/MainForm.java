@@ -29,6 +29,8 @@ public class MainForm {
     private static final Logger logger = LogManager.getLogger(MainForm.class);
 
     private LdapSearchListener ldapSearchListener;
+
+    // collection of optional payload_panel
     private ArrayList<JPanel> panelList = new ArrayList<JPanel>();
     private StyledDocument doc;
 
@@ -109,6 +111,8 @@ public class MainForm {
     private JPanel UnMysqlPanel;
     private JLabel ScriptFileLabel;
     private JTextField ScriptFileTextField;
+
+    // ldap search url
     private JTextPane LdapSearchTextPane;
     private JPanel TomcatGroovyPanel;
     private JLabel TomcatGroovyWaysLabel;
@@ -128,13 +132,15 @@ public class MainForm {
         initGadgetSelect();
         initCommandOutput();
 
-        // init the panelList
+        // init the panelList ()
         panelList.add(CommandPanel);
-        panelList.add(FilePanel);
-        panelList.add(TomcatGroovyPanel);
         panelList.add(ReversePanel);
         panelList.add(DnsLogPanel);
         panelList.add(JDK8u20Panel);
+        panelList.add(FilePanel);
+        panelList.add(TomcatGroovyPanel);
+
+        // parent panel is DescriptionPanel
         panelList.add(XXEPanel);
         panelList.add(CCPanel);
         panelList.add(JdbcPanel);
@@ -165,6 +171,9 @@ public class MainForm {
 
     }
 
+    /**
+     *                =====================               bind listener for any component               =====================
+     */
     private void initService() {
         // add listener to reset
         IPTextField.addMouseListener(new MouseAdapter() {
@@ -617,6 +626,10 @@ public class MainForm {
         logger.info("Function initCommandOutput ended ...");
     }
 
+    /**
+     *            ==================      tools         ==================
+     */
+    //
     private void setPanelVisibleToTrue(JPanel panel) {
         for (JPanel jPanel : panelList) {
             if (jPanel.equals(panel)) {
@@ -628,7 +641,7 @@ public class MainForm {
     }
 
     public static void main() {
-        FlatLightLaf.setup();
+        FlatLightLaf.setup(); //设置Flat Light主题
         JFrame frame = new JFrame("JNDI-injector");
         frame.setIconImage(new ImageIcon(MainForm.class.getResource("/ui/imgs/img1.png")).getImage());
         frame.setContentPane(new MainForm().InjectorPanel);
