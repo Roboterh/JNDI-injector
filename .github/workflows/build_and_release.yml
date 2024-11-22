@@ -23,9 +23,7 @@ jobs:
         run: |
           mvn clean package -DskipTests
           echo "artifactPath=$(pwd)/target" >> $GITHUB_ENV
-          body=$(cat BODY)
           tag=${GITHUB_REF_NAME}
-          echo "body=$body" >> $GITHUB_ENV
           echo "tag=$tag" >> $GITHUB_ENV
       - name: Release
         uses: actions/create-release@v1
@@ -35,7 +33,7 @@ jobs:
           prerelease: false
           release_name: ${{ env.tag }}
           tag_name: ${{ env.tag }}
-          body: ${{ env.body }}
+          body: packaged by github actions
         env:
           GITHUB_TOKEN: ${{ github.token }}
       - name: Upload Release
