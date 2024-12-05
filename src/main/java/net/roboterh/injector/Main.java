@@ -1,5 +1,6 @@
 package net.roboterh.injector;
 
+import net.roboterh.injector.cli.CliServerStart;
 import net.roboterh.injector.enums.GadgetEnum;
 import net.roboterh.injector.forms.MainForm;
 import org.apache.log4j.LogManager;
@@ -13,8 +14,15 @@ public class Main {
 //            logger.info("This is a GUI tools for JNDI injection!!\n" +
 //                    "Now, you could run 'java -jar JNDI-injector' to start it.");
             // use cli mode
+            logger.info("JNDI-injector cli mode staring ...");
+            try {
+                CliServerStart.run(args);
+            } catch (Exception e) {
+                logger.error("CliServer start fail...");
+            }
         } else {
             // use GUI mode (default)
+            logger.info("JNDI-injector GUI mode starting ...");
             MainForm.main();
         }
 //        for (GadgetEnum gadgetEnum : GadgetEnum.values()) {

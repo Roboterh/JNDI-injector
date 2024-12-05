@@ -22,16 +22,16 @@ jobs:
       - name: Build
         run: |
           mvn clean package -DskipTests
-          echo "artifactPath=$(pwd)/target" >> $GITHUB_ENV
+          zip -r JNDI-injector.zip $(pwd)/target/JNDI-injector.jar data/
           tag=${GITHUB_REF_NAME}
           echo "tag=$tag" >> $GITHUB_ENV
       - name: Release
         uses: actions/create-release@v1
         id: create_release
         with:
-          draft: true
+          draft: false
           prerelease: false
-          release_name: ${{ env.tag }}
+          release_name: JNDI-injector ${{ env.tag }}
           tag_name: ${{ env.tag }}
           body: packaged by github actions
         env:
@@ -42,6 +42,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ env.artifactPath }}/JNDI-injector.jar
-          asset_name: JNDI-injector.jar
+          asset_path: JNDI-injector.zip
+          asset_name: JNDI-injector.zip
           asset_content_type: application/java-archive
