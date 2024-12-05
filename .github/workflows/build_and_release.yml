@@ -22,7 +22,8 @@ jobs:
       - name: Build
         run: |
           mvn clean package -DskipTests
-          zip -r JNDI-injector.zip $(pwd)/target/JNDI-injector.jar data/
+          mv $(pwd)/target/JNDI-injector.jar JNDI-injector.jar
+          zip -r JNDI-injector.zip JNDI-injector.jar data/
           tag=${GITHUB_REF_NAME}
           echo "tag=$tag" >> $GITHUB_ENV
       - name: Release
