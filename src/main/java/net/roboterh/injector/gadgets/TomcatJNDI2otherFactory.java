@@ -1,6 +1,5 @@
 package net.roboterh.injector.gadgets;
 
-import com.sun.javaws.IconUtil;
 import com.unboundid.ldap.listener.interceptor.InMemoryInterceptedSearchResult;
 import com.unboundid.ldap.sdk.Entry;
 import com.unboundid.ldap.sdk.LDAPException;
@@ -9,7 +8,6 @@ import com.unboundid.ldap.sdk.ResultCode;
 import net.roboterh.injector.servers.HTTPServer;
 import net.roboterh.injector.utils.GadgetUtils;
 import org.apache.naming.LookupRef;
-import org.apache.naming.ResourceRef;
 
 import javax.naming.StringRefAddr;
 
