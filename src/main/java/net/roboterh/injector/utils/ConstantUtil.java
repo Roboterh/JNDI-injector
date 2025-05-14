@@ -20,6 +20,7 @@ public interface ConstantUtil {
     String TomcatMVELNote = "需要具有Tomcat and MVEL依赖";
     String TomcatCommonsConfigurationNote = "需要具有Tomcat and commons-configuration/commons-configuration2";
     String TomcatOrDruidJdbcNote = "需要具有tomcat-dbcp/commons-dbcp/tomcat-jdbc/Druid and JDBC Driver依赖";
+    String TomcatJNDI2JDBCNote = "需要具有Tomcat and JDBC Driver依赖";
 
     String DnsLogNote = "发送dns查询请求";
     String CommandNote = "直接执行命令";
@@ -56,6 +57,7 @@ public interface ConstantUtil {
     String[] TomcatMVELPayload = {"Command", "File"};
     String[] TomcatCommonsConfigurationPayload = {"BeanFactory", "GenericNamingResourcesFactory"};
     String[] TomcatOrDruidJdbcPayload = {"H2", "Mysql"};
+    String[] TomcatJNDI2JDBCPayload = {"Mysql"};
 
     /**
      *            =================           description of different ways            =================
@@ -82,6 +84,7 @@ public interface ConstantUtil {
     String TomcatCommonsConfigurationDescription = "<html>Tomcat CommonsConfiguration Way:<br>" +
             "    Requirement:<br>" +
             "    &nbsp;&nbsp;Tomcat/tomcat-jdbc.jar and CommonsConfiguration/CommonsConfiguration2 in classpath<br>" +
+            "    &nbsp;&nbsp;Tomcat < 10.1.0-M14, 10.0.21, 9.0.63, 8.5.79<br>" +
             "    Explanation:<br>" +
             "    &nbsp;&nbsp;The class named `org.apache.commons.configuration.SystemConfiguration` or `org.apache.commons.configuration2.SystemConfiguration`<br>" +
             "    &nbsp;&nbsp;&nbsp;&nbsp;is an eligible beanClass. And the method of beanClass named `setSystemProperties` will load a local or remote file<br>" +
@@ -93,7 +96,8 @@ public interface ConstantUtil {
             "    &nbsp;&nbsp;&nbsp;&nbsp;as the input is systemProperties, and the output is setSystemProperties.</html>";
     String TomcatELDescription = "<html>Tomcat EL Way:<br>" +
             "    Requirement:<br>" +
-            "    &nbsp;&nbsp;Tomcat 8+(catalina and el-api) or springboot1.2.x+ in classpath<br>" +
+            "    &nbsp;&nbsp;Tomcat 8+(catalina and jasper) or springboot1.2.x+ in classpath<br>" +
+            "    &nbsp;&nbsp;Tomcat < 10.1.0-M14, 10.0.21, 9.0.63, 8.5.79<br>" +
             "    Explanation:<br>" +
             "    &nbsp;&nbsp;1. set javaSerializedData to Serialized ResourceRef-object<br>" +
             "    &nbsp;&nbsp;2. call NamingManger#getObjectInstance when ldap-client calls lookup<br>" +
@@ -103,6 +107,7 @@ public interface ConstantUtil {
     String TomcatGroovyDescription = "<html>Tomcat Groovy Way:<br>" +
             "    Requirement:<br>" +
             "    &nbsp;&nbsp;Tomcat and Groovy in classpath<br>" +
+            "    &nbsp;&nbsp;Tomcat < 10.1.0-M14, 10.0.21, 9.0.63, 8.5.79<br>" +
             "    Explanation:<br>" +
             "    &nbsp;&nbsp;There are many ways to execute groovy script, such as<br>" +
             "    &nbsp;&nbsp;&nbsp;&nbsp;1. groovy.lang.GroovyClassLoader#parseClass<br>" +
@@ -118,6 +123,7 @@ public interface ConstantUtil {
     String TomcatMVELDescription = "<html>Tomcat MVEL Way:<br>" +
             "    Requirement:<br>" +
             "    &nbsp;&nbsp;Tomcat and MVEL in classpath<br>" +
+            "    &nbsp;&nbsp;Tomcat < 10.1.0-M14, 10.0.21, 9.0.63, 8.5.79<br>" +
             "    Explanation:<br>" +
             "    &nbsp;&nbsp;There will determine what method will be called in org.mvel2.sh.ShellSession#exec<br>" +
             "    &nbsp;&nbsp;There is a calling (MVEL#eval) in PushContext#execute</html>";
@@ -127,6 +133,7 @@ public interface ConstantUtil {
             "    &nbsp;&nbsp;particular jdbc drivers in classpath<br>" +
             "    &nbsp;&nbsp;There are other factories playing the same role<br>" +
             "    &nbsp;&nbsp;&nbsp;&nbsp;tomcat-jdbc / druid in classpath<br>" +
+            "    &nbsp;&nbsp;Tomcat < 10.1.0-M14, 10.0.21, 9.0.63, 8.5.79<br>" +
             "    Explanation:<br>" +
             "    &nbsp;&nbsp;Once the attribute `initialSize` more than the 0, the method `getLogWriter` will be called.<br>" +
             "    &nbsp;&nbsp;Then it could build a connection of JDBC<br>" +
@@ -136,6 +143,7 @@ public interface ConstantUtil {
     String TomcatSnakeYamlDescription = "<html>Tomcat SnakeYaml Way:<br>" +
             "    Requirement:<br>" +
             "    &nbsp;&nbsp;Tomcat and SnakeYaml in classpath<br>" +
+            "    &nbsp;&nbsp;Tomcat < 10.1.0-M14, 10.0.21, 9.0.63, 8.5.79<br>" +
             "    Explanation:<br>" +
             "    &nbsp;&nbsp;load malicious .yml file to execute particular code using method org.yaml.snakeyaml.Yaml#load<br>" +
             "    &nbsp;&nbsp;the payload is<br>" +
@@ -143,7 +151,14 @@ public interface ConstantUtil {
             "    &nbsp;&nbsp;load the class which is content of services/javax.script.ScriptEngineFactory by SPI</html>";
     String TomcatXStreamDescription = "<html>Tomcat XStream Way:<br>" +
             "    Requirement:<br>" +
-            "    &nbsp;&nbsp;Tomcat and XStream < 1.4.17 in classpath<br>" +
+            "    &nbsp;&nbsp;Tomcat and XStream <= 1.4.17 in classpath<br>" +
+            "    &nbsp;&nbsp;Tomcat < 10.1.0-M14, 10.0.21, 9.0.63, 8.5.79<br>" +
             "    Explanation:<br>" +
             "    &nbsp;&nbsp;call com.thoughtworks.xstream.XStream#fromXML to load malicious xml</html>";
+    String TomcatJNDI2JDBCDescription = "<html>TomcatJNDI2JDBC Way:<br>" +
+            "    Requirement:<br>" +
+            "    &nbsp;&nbsp;Tomcat and particular driver in classpath<br>" +
+            "    Explanation:<br>" +
+            "    &nbsp;&nbsp;1. ResourceFactory#getObjectFactory: if the key factory is not exist, the getDefaultFactory method will be called<br>" +
+            "    &nbsp;&nbsp;2. if the target class in Reference is `javax.sql.DataSource`, it will reconstruct a new factory default is `org.apache.tomcat.dbcp.dbcp2.BasicDataSourceFactory`</html>";
 }

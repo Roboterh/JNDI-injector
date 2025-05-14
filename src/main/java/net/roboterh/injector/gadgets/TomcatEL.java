@@ -25,6 +25,7 @@ import java.util.Arrays;
     Tomcat EL Way:
     Requirement:
         Tomcat 8+(catalina and el-api) or springboot1.2.x+ in classpath
+        Tomcat 10.1.0-M14,10.0.21,9.0.63,8.5.79
     Explanation:
         1. set javaSerializedData to Serialized ResourceRef-object
         2. call NamingManger#getObjectInstance when ldap-client calls lookup

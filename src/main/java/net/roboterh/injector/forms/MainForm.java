@@ -286,6 +286,9 @@ public class MainForm {
                     case "TomcatOrDruidJdbc":
                         label.setToolTipText(TomcatOrDruidJdbcNote);
                         break;
+                    case "TomcatJNDI2JDBC":
+                        label.setToolTipText(TomcatJNDI2JDBCNote);
+                        break;
                 }
                 return label;
             }
@@ -398,6 +401,10 @@ public class MainForm {
                     case "TomcatOrDruidJdbc":
                         PayloadList.setListData(TomcatOrDruidJdbcPayload);
                         DescriptionLabel.setText(TomcatOrDruidJdbcDescription);
+                        break;
+                    case "TomcatJNDI2JDBC":
+                        PayloadList.setListData(TomcatJNDI2JDBCPayload);
+                        DescriptionLabel.setText(TomcatJNDI2JDBCDescription);
                         break;
                 }
             }
@@ -555,6 +562,9 @@ public class MainForm {
                             ldapSearchListener.register();
                             break;
                         case "Mysql":
+                            if (WaysList.getSelectedValue().equals("TomcatJNDI2JDBC")) {
+
+                            }
                             setPanelVisibleToTrue(JdbcPanel);
                             MysqlPanel.setVisible(true);
                             UnMysqlPanel.setVisible(false);

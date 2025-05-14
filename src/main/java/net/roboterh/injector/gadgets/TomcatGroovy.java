@@ -24,6 +24,7 @@ import java.util.Arrays;
     Tomcat Groovy Way:
     Requirement:
         Tomcat and Groovy in classpath
+        Tomcat 10.1.0-M14,10.0.21,9.0.63,8.5.79
     Explanation:
         There are many ways to execute groovy script, such as
             1. groovy.lang.GroovyClassLoader#parseClass

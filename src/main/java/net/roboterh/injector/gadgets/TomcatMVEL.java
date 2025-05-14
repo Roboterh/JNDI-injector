@@ -20,6 +20,7 @@ import java.util.Arrays;
     Tomcat MVEL Way:
     Requirement:
         Tomcat and MVEL in classpath
+        Tomcat 10.1.0-M14,10.0.21,9.0.63,8.5.79
     Explanation:
         There will determine what method will be called in org.mvel2.sh.ShellSession#exec
         There is a calling (MVEL#eval) in PushContext#execute

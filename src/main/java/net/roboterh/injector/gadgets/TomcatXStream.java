@@ -20,6 +20,7 @@ import java.util.Arrays;
     Tomcat XStream Way:
     Requirement:
         Tomcat and XStream < 1.4.17 in classpath
+        Tomcat 10.1.0-M14,10.0.21,9.0.63,8.5.79
     Explanation:
         call com.thoughtworks.xstream.XStream#fromXML to load malicious xml
  */

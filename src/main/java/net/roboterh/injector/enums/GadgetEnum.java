@@ -11,4 +11,9 @@ public enum GadgetEnum {
     TomcatMVEL,
     TomcatCommonsConfiguration,
     TomcatOrDruidJdbc,
+    TomcatJNDI2JDBC,
+    TomcatJNDI2otherFactory,
+    C3P0JNDI2Setter,
+    TomcatJNDI2Dos,
+    Tomcat2Setter,
 }

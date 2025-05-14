@@ -29,6 +29,7 @@ import java.util.jar.JarOutputStream;
     Tomcat SnakeYaml Way:
     Requirement:
         Tomcat and SnakeYaml in classpath
+        Tomcat 10.1.0-M14,10.0.21,9.0.63,8.5.79
     Explanation:
         load malicious .yml file to execute particular code using method org.yaml.snakeyaml.Yaml#load
         the payload is

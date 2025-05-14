@@ -10,15 +10,15 @@ public class Main {
     private static final Logger logger = LogManager.getLogger(Main.class);
 
     public static void main(String[] args) {
-        if (args.length == 1 && "cli".equals(args[0])) {
+        if (args.length != 0 && "cli".equals(args[0])) {
 //            logger.info("This is a GUI tools for JNDI injection!!\n" +
 //                    "Now, you could run 'java -jar JNDI-injector' to start it.");
             // use cli mode
-            logger.info("JNDI-injector cli mode staring ...");
+            System.out.println("JNDI-injector cli mode staring ...");
             try {
                 CliServerStart.run(args);
             } catch (Exception e) {
-                logger.error("CliServer start fail...");
+                System.out.println("CliServer start fail...");
             }
         } else {
             // use GUI mode (default)

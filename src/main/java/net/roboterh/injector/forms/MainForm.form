@@ -675,6 +675,7 @@
                         <item value="TomcatMVEL"/>
                         <item value="TomcatCommonsConfiguration"/>
                         <item value="TomcatOrDruidJdbc"/>
+                        <item value="TomcatJNDI2JDBC"/>
                       </model>
                     </properties>
                   </component>

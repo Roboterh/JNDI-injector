@@ -32,7 +32,7 @@ public class CliServerStart {
             // parse
             cmd = parser.parse(options, args);
         } catch (Exception e) {
-            logger.error("Cmdlines parse failed...");
+            System.out.println("Cmdlines parse failed...");
             System.exit(1);
         }
 
@@ -61,19 +61,21 @@ public class CliServerStart {
                 // ldap server
                 ldapServer.startServer();
             } catch (Exception ex) {
-                logger.error(String.format("Start ldap service wrong: %s", ex.getMessage()));
+                System.out.println(String.format("Start ldap service wrong: %s", ex.getMessage()));
             }
             try {
                 // http server
                 httpServer.startServer();
             } catch (Exception ex) {
-                logger.error(String.format("Start http service wrong: %s", ex.getMessage()));
+                System.out.println(String.format("Start http service wrong: %s", ex.getMessage()));
             }
         } catch (Exception e) {
-            logger.info(e.getMessage());
+            System.out.println(e.getMessage());
         }
 
-        logger.info("Cli service started...\r\nplease use the same LDAP Search Link as the GUI-version!!");
+        System.out.println("Cli service started...\r\nplease use the same LDAP Search Link as the GUI-version!!\r\n\r\n" +
+                "HTTP Server: http://" + addr + ":" + httpPort + "/\r\n" +
+                "LDAP Server: ldap://" + addr + ":" + ldapPort + "/");
     }
 
     public static Options cmdlineOptions() {
