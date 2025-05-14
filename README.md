@@ -102,6 +102,9 @@ java -jar .\JNDI-injector.jar cli
 
 之后使用GUI动态生成的Ldap Search Link进行相同的查询方式即可
 
+## Contributions
+LeeH-money
+
 ## TODO
 
 1. 添加更多样化的内存马注入和注入方式
